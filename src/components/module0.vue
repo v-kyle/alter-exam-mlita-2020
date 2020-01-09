@@ -16,7 +16,7 @@
                         </v-col>
                     </template>
                 </v-row>
-                <v-btn text color="deep-purple accent-4" @click="getAnswer" :disabled="!valid">
+                <v-btn color="deep-purple accent-4" @click="getAnswer" :disabled="!valid">
                     Enter
                 </v-btn>
             </v-container>
@@ -30,10 +30,11 @@
 
 <script>
     export default {
-        name: "module1",
+        name: "module0",
         data() {
             return {
                 input: '',
+                answer: null,
                 rules: [
                     value => !!value || 'Required.',
                 ],
@@ -54,9 +55,31 @@
                 this.$refs.formInput.focus();
             },
 
-            getAnswer() {
-                this.answer = Math.random() >= 0.5;
+            async getAnswer() {
+                let input = this.input;
+
+                try {
+                    let responce = await fetch(
+                        'https://cors-anywhere.herokuapp.com/http://83.166.240.14:8080/api/validity', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({data: input})
+                    });
+                    let json = await responce.json();
+                    if (!json.error) {
+                        this.answer = (json.result) ? 'Общезначима' : 'Не общезначима';
+                    }
+                } catch (e) {
+                    this.answer = "Error!!!";
+                }
             }
+        },
+        watch: {
+            input(value) {
+                this.input = value.toUpperCase();
+            },
         }
     }
 </script>

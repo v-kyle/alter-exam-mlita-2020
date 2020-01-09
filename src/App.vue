@@ -6,7 +6,7 @@
                 dark
                 dense
         >
-            <v-toolbar-title>FOXRAM</v-toolbar-title>
+            <v-toolbar-title class="mx-auto">FOXRAM</v-toolbar-title>
         </v-app-bar>
 
         <v-content>
@@ -97,17 +97,11 @@
             ],
             tab: 0,
             currentModule: 0,
-            answer: null,
             instruction: "<b>!</b> - Отрицание; <b>∧</b> - Конъюнкция; <b>∨</b> - Дизъюнкция; <b>→</b> - Импликация; <b>⇔</b> - Эквивалентность; <b>⊕</b> - XOR"
         }),
         computed: {},
         methods: {
 
         },
-        watch: {
-            input(value) {
-                this.input = value.toUpperCase();
-            },
-        }
     };
 </script>
