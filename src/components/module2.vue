@@ -8,18 +8,18 @@
                         :key="index"
                         ref="forms"
                         v-model="inputs[index]"
-                        @change="changeActiveForm(index)"
+                        @click="changeActiveForm(index)"
                         :rules="rules"
                         label="Formula"
                         required
                 />
                 <v-btn @click="addInput">Добавить поле</v-btn>
                 <v-divider class="my-4"/>
-                <div><b>Формула для проверки:</b></div>
+                <div><b>Предполагаемое следствие:</b></div>
                 <v-text-field
                         ref="formula"
                         v-model="formula"
-                        @change="changeActiveForm(-123)"
+                        @click="changeActiveForm(-123)"
                         :rules="rules"
                         label="Formula"
                         required
@@ -31,14 +31,16 @@
                         </v-col>
                     </template>
                 </v-row>
-                <v-btn text color="deep-purple accent-4" @click="getAnswer" :disabled="!valid">
-                    Enter
+                <v-btn color="primary white--text" @click="getAnswer" :disabled="!valid">
+                    Подтвердить
                 </v-btn>
             </v-container>
         </v-form>
-        <v-alert color="primary" dense class="white--text">
-            Result is: <b>{{ answer }}</b>
+        <v-progress-linear :active="loading" :indeterminate="loading"/>
+        <v-alert color="success" dense class="white--text">
+            Результат: <br/> <b>{{ answer }}</b>
         </v-alert>
+        <v-data-table :headers="headers" :items="items"/>
     </div>
 </template>
 
@@ -47,6 +49,7 @@
         name: "module2",
         data() {
             return {
+                loading: false,
                 valid: false,
                 inputs: [''],
                 lastUsedForm: null,
@@ -64,6 +67,8 @@
                 ],
                 formula: '',
                 answer: null,
+                headers: [],
+                items: [],
 
             }
         },
@@ -73,11 +78,9 @@
             },
             changeActiveForm(index) {
                 if (index !== -123) {
-                    this.inputs[index] = this.inputs[index].toUpperCase();
                     this.lastUsedForm = this.$refs.forms[index];
                     this.lastUsedInputIndex = index;
                 } else {
-                    this.formula = this.formula.toUpperCase();
                     this.lastUsedForm = this.$refs.formula;
                     this.lastUsedInputIndex = null;
                 }
@@ -93,12 +96,16 @@
                 this.$forceUpdate();
             },
             async getAnswer() {
+                this.loading = true;
+                this.inputs = this.inputs.map((el)=>el.toUpperCase());
+                this.formula = this.formula.toUpperCase();
+
                 let inputs = this.inputs;
                 let formula = this.formula;
 
                 try {
                     let responce = await fetch(
-                        'https://cors-anywhere.herokuapp.com/http://83.166.240.14:8080/api/consequence', {
+                        'http://83.166.240.14:8080/api/consequence', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -108,9 +115,33 @@
                     let json = await responce.json();
                     if (!json.error) {
                         this.answer = (json.result) ? 'Верно' : 'Не верно';
+
+                        this.headers = Object.keys(json.description).map(el => {
+                            return {text: el, value: el};
+                        });
+
+                        let matrix = this.headers.map((el)=>{
+                            return json.description[el.text];
+                        });
+
+                        const transpose = matrix => matrix[0].map((col, i) => matrix.map(row => row[i]));
+
+                        let transMatrix = transpose(matrix);
+
+                        let headers = this.headers;
+
+                        this.items = transMatrix.map(row=>{
+                            return Object.assign({}, ...row.map((el, index) => {
+                                return {[headers[index].text]: el};
+                            }));
+                        });
                     }
                 } catch (e) {
+                    // eslint-disable-next-line no-console
+                    console.log(e);
                     this.answer = "Error!!!";
+                } finally {
+                    this.loading = false;
                 }
 
             }
