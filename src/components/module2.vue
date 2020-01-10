@@ -75,6 +75,8 @@
         methods: {
             addInput() {
                 this.inputs.push('');
+                this.inputs = this.inputs.map((el)=>el.toUpperCase());
+                this.formula = this.formula.toUpperCase();
             },
             changeActiveForm(index) {
                 if (index !== -123) {

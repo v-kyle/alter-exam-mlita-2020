@@ -40,6 +40,19 @@
         <v-alert color="success" dense class="white--text">
             Результат: <br/> <b>{{ answer }}</b>
         </v-alert>
+
+        <v-list>
+            <v-list-item-group v-model="model">
+                <v-list-item
+                        v-for="(item, i) in items"
+                        :key="i"
+                >
+                    <v-list-item-content>
+                        <v-list-item-title v-text="item"/>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list-item-group>
+        </v-list>
     </div>
 </template>
 
@@ -48,6 +61,8 @@
         name: "module2",
         data() {
             return {
+                model: 1,
+                items: [],
                 loading: false,
                 valid: false,
                 inputs: [''],
@@ -72,6 +87,8 @@
         methods: {
             addInput() {
                 this.inputs.push('');
+                this.inputs = this.inputs.map((el)=>el.toUpperCase());
+                this.formula = this.formula.toUpperCase();
             },
             changeActiveForm(index) {
                 if (index !== -123) {
@@ -94,7 +111,7 @@
             },
             async getAnswer() {
                 this.loading = true;
-                this.inputs = this.inputs.map((el)=>el.toUpperCase());
+                this.inputs = this.inputs.map((el) => el.toUpperCase());
                 this.formula = this.formula.toUpperCase();
 
                 let inputs = this.inputs;
@@ -112,6 +129,8 @@
                     let json = await responce.json();
                     if (!json.error) {
                         this.answer = (json.result) ? 'Верно' : 'Не верно';
+
+                        this.items = json.description;
                     }
                 } catch (e) {
                     this.answer = "Error!!!";
