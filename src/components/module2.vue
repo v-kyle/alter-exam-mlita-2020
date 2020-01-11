@@ -140,7 +140,7 @@
                 } catch (e) {
                     // eslint-disable-next-line no-console
                     console.log(e);
-                    this.answer = "Error!!!";
+                    this.answer = "Ошибка ввода!";
                 } finally {
                     this.loading = false;
                 }

@@ -132,7 +132,7 @@
                         this.items = json.description;
                     }
                 } catch (e) {
-                    this.answer = "Error!!!";
+                    this.answer = "Ошибка ввода!";
                 } finally {
                     this.loading = false;
                 }
