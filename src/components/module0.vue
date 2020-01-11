@@ -47,7 +47,6 @@
                     {operation: 'Дизъюнкция', sign: '∨'},
                     {operation: 'Импликация', sign: '→'},
                     {operation: 'Эквиваленция', sign: '⇔'},
-                    {operation: 'XOR', sign: '⊕'},
                 ],
                 valid: false,
                 headers: [],

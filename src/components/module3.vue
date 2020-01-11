@@ -77,7 +77,6 @@
                     {operation: 'Дизъюнкция', sign: '∨'},
                     {operation: 'Импликация', sign: '→'},
                     {operation: 'Эквиваленция', sign: '⇔'},
-                    {operation: 'XOR', sign: '⊕'},
                 ],
                 formula: '',
                 answer: null,
