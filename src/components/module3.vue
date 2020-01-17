@@ -13,7 +13,14 @@
                         label="Formula"
                         required
                 />
-                <v-btn @click="addInput">Добавить поле</v-btn>
+                <v-row>
+                    <v-col>
+                        <v-btn @click="addInput">Добавить поле</v-btn>
+                    </v-col>
+                    <v-col>
+                        <v-btn @click="removeLastInput" :disabled="inputs.length === 1">Удалить последнее поле поле</v-btn>
+                    </v-col>
+                </v-row>
                 <v-divider class="my-4"/>
                 <div><b>Предполагаемое следствие:</b></div>
                 <v-text-field
@@ -88,6 +95,15 @@
                 this.inputs.push('');
                 this.inputs = this.inputs.map((el)=>el.toUpperCase());
                 this.formula = this.formula.toUpperCase();
+            },
+            removeLastInput() {
+                this.inputs.pop();
+                this.$refs.forms.pop();
+                this.inputs = this.inputs.map((el)=>el.toUpperCase());
+                this.formula = this.formula.toUpperCase();
+
+                this.lastUsedForm = this.$refs.forms[this.$refs.forms.length - 1];
+                this.lastUsedInputIndex = this.inputs.length - 1;
             },
             changeActiveForm(index) {
                 if (index !== -123) {
