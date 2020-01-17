@@ -39,7 +39,7 @@
                     </template>
                 </v-row>
                 <v-btn color="primary white--text" @click="getAnswer" :disabled="!valid">
-                    Подтвердить
+                    Проверить
                 </v-btn>
             </v-container>
         </v-form>
@@ -91,16 +91,25 @@
             }
         },
         methods: {
+            convertSymbols(str) {
+                str = str.replace(/\*/g, "∧");
+                str = str.replace(/\+/g, "∨");
+                str = str.replace(/->/g, "→");
+                str = str.replace(/<=>/g, "⇔");
+                return str.toUpperCase();
+            },
+
             addInput() {
                 this.inputs.push('');
-                this.inputs = this.inputs.map((el)=>el.toUpperCase());
-                this.formula = this.formula.toUpperCase();
+                this.inputs = this.inputs.map(this.convertSymbols);
+                this.formula = this.convertSymbols(this.formula);
             },
             removeLastInput() {
                 this.inputs.pop();
                 this.$refs.forms.pop();
-                this.inputs = this.inputs.map((el)=>el.toUpperCase());
-                this.formula = this.formula.toUpperCase();
+
+                this.inputs = this.inputs.map(this.convertSymbols);
+                this.formula = this.convertSymbols(this.formula);
 
                 this.lastUsedForm = this.$refs.forms[this.$refs.forms.length - 1];
                 this.lastUsedInputIndex = this.inputs.length - 1;
@@ -126,8 +135,8 @@
             },
             async getAnswer() {
                 this.loading = true;
-                this.inputs = this.inputs.map((el) => el.toUpperCase());
-                this.formula = this.formula.toUpperCase();
+                this.inputs = this.inputs.map(this.convertSymbols);
+                this.formula = this.convertSymbols(this.formula);
 
                 let inputs = this.inputs;
                 let formula = this.formula;
@@ -146,6 +155,9 @@
                         this.answer = (json.result) ? 'Верно' : 'Не верно';
 
                         this.items = json.description;
+                    }
+                    else {
+                        this.answer = "Ошибка ввода!";
                     }
                 } catch (e) {
                     this.answer = "Ошибка ввода!";

@@ -17,7 +17,7 @@
                     </template>
                 </v-row>
                 <v-btn color="primary white--text" @click="getAnswer" :disabled="!valid">
-                    Подтвердить
+                    Проверить
                 </v-btn>
             </v-container>
         </v-form>
@@ -54,6 +54,14 @@
             }
         },
         methods: {
+            convertSymbols(str) {
+                str = str.replace(/\*/g, "∧");
+                str = str.replace(/\+/g, "∨");
+                str = str.replace(/->/g, "→");
+                str = str.replace(/<=>/g, "⇔");
+                return str.toUpperCase();
+            },
+
             insertSpecialSymbol(signIndex) {
                 this.input += this.operations[signIndex].sign;
                 this.$refs.formInput.focus();
@@ -107,7 +115,7 @@
         },
         watch: {
             input(value) {
-                this.input = value.toUpperCase();
+                this.input = this.convertSymbols(value);
             },
         }
     }

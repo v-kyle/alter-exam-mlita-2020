@@ -40,7 +40,7 @@
                     </template>
                 </v-row>
                 <v-btn color="primary white--text" @click="getAnswer" :disabled="!valid">
-                    Подтвердить
+                    Проверить
                 </v-btn>
             </v-container>
         </v-form>
@@ -80,16 +80,24 @@
             }
         },
         methods: {
+            convertSymbols(str) {
+                str = str.replace(/\*/g, "∧");
+                str = str.replace(/\+/g, "∨");
+                str = str.replace(/->/g, "→");
+                str = str.replace(/<=>/g, "⇔");
+                return str.toUpperCase();
+            },
+
             addInput() {
                 this.inputs.push('');
-                this.inputs = this.inputs.map((el)=>el.toUpperCase());
-                this.formula = this.formula.toUpperCase();
+                this.inputs = this.inputs.map(this.convertSymbols);
+                this.formula = this.convertSymbols(this.formula);
             },
             removeLastInput() {
                 this.inputs.pop();
                 this.$refs.forms.pop();
-                this.inputs = this.inputs.map((el)=>el.toUpperCase());
-                this.formula = this.formula.toUpperCase();
+                this.inputs = this.inputs.map(this.convertSymbols);
+                this.formula = this.convertSymbols(this.formula);
 
                 this.lastUsedForm = this.$refs.forms[this.$refs.forms.length - 1];
                 this.lastUsedInputIndex = this.inputs.length - 1;
@@ -115,8 +123,8 @@
             },
             async getAnswer() {
                 this.loading = true;
-                this.inputs = this.inputs.map((el)=>el.toUpperCase());
-                this.formula = this.formula.toUpperCase();
+                this.inputs = this.inputs.map(this.convertSymbols);
+                this.formula = this.convertSymbols(this.formula);
 
                 let inputs = this.inputs;
                 let formula = this.formula;
@@ -131,7 +139,7 @@
                             body: JSON.stringify({data: inputs, formula: formula})
                         });
                     let json = await responce.json();
-                    if (!json.error) {
+                    if (json.status === 'ok') {
                         this.answer = (json.result) ? 'Верно' : 'Не верно';
 
                         this.headers = Object.keys(json.description).map(el => {
@@ -153,6 +161,9 @@
                                 return {[headers[index].text]: el};
                             }));
                         });
+                    }
+                    else {
+                        this.answer = "Ошибка ввода!";
                     }
                 } catch (e) {
                     // eslint-disable-next-line no-console
