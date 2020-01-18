@@ -18,7 +18,7 @@
                         <v-btn @click="addInput">Добавить поле</v-btn>
                     </v-col>
                     <v-col>
-                        <v-btn @click="removeLastInput" :disabled="inputs.length === 1">Удалить последнее поле поле</v-btn>
+                        <v-btn @click="removeLastInput" :disabled="inputs.length === 1">Удалить последнее поле</v-btn>
                     </v-col>
                 </v-row>
                 <v-divider class="my-4"/>

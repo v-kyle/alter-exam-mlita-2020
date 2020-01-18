@@ -18,7 +18,7 @@
                         <v-btn @click="addInput">Добавить поле</v-btn>
                     </v-col>
                     <v-col>
-                        <v-btn @click="removeLastInput" :disabled="inputs.length === 1">Удалить последнее поле поле</v-btn>
+                        <v-btn @click="removeLastInput" :disabled="inputs.length === 1">Удалить последнее поле</v-btn>
                     </v-col>
                 </v-row>
 
@@ -87,6 +87,9 @@
                 str = str.replace(/<=>/g, "⇔");
                 return str.toUpperCase();
             },
+            addBracketsToInputs(el) {
+                return `(${el})`;
+            },
 
             addInput() {
                 this.inputs.push('');
@@ -126,7 +129,7 @@
                 this.inputs = this.inputs.map(this.convertSymbols);
                 this.formula = this.convertSymbols(this.formula);
 
-                let inputs = this.inputs;
+                let inputs = this.inputs.map(this.addBracketsToInputs);
                 let formula = this.formula;
 
                 try {
@@ -146,7 +149,7 @@
                             return {text: el, value: el};
                         });
 
-                        let matrix = this.headers.map((el)=>{
+                        let matrix = this.headers.map((el) => {
                             return json.description[el.text];
                         });
 
@@ -156,13 +159,12 @@
 
                         let headers = this.headers;
 
-                        this.items = transMatrix.map(row=>{
+                        this.items = transMatrix.map(row => {
                             return Object.assign({}, ...row.map((el, index) => {
                                 return {[headers[index].text]: el};
                             }));
                         });
-                    }
-                    else {
+                    } else {
                         this.answer = "Ошибка ввода!";
                     }
                 } catch (e) {
