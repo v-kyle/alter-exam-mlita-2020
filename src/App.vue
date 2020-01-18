@@ -113,7 +113,7 @@
             module0,
             module1,
             module2,
-            module3
+            module3,
         },
 
         data: () => ({
@@ -134,6 +134,7 @@
                     title: 'Метод резолюций',
                     description: 'Использование метода резолюции для проверки истинности высказывания'
                 },
+
             ],
             operations: [
                 {operation: 'Отрицание', sign: '!'},

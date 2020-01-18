@@ -48,7 +48,7 @@
             Результат: <br/> <b>{{ answer }}</b>
         </v-alert>
 
-        <v-list>
+        <v-list v-if="!error">
             <v-list-item-group v-model="model">
                 <v-list-item
                         v-for="(item, i) in items"
@@ -68,6 +68,7 @@
         name: "module2",
         data() {
             return {
+                error: false,
                 model: 1,
                 items: [],
                 loading: false,
@@ -134,6 +135,7 @@
                 this.$forceUpdate();
             },
             async getAnswer() {
+                this.error = false;
                 this.loading = true;
                 this.inputs = this.inputs.map(this.convertSymbols);
                 this.formula = this.convertSymbols(this.formula);
@@ -158,8 +160,10 @@
                     }
                     else {
                         this.answer = "Ошибка ввода!";
+                        this.error = true;
                     }
                 } catch (e) {
+                    this.error = true;
                     this.answer = "Ошибка ввода!";
                 } finally {
                     this.loading = false;

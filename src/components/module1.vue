@@ -26,7 +26,7 @@
         <v-alert color="success" dense class="white--text">
             Результат: <br/> <b>{{ answer }}</b>
         </v-alert>
-        <v-data-table :headers="headers" :items="items"/>
+        <v-data-table :headers="headers" :items="items" v-if="!error"/>
     </div>
 </template>
 
@@ -35,6 +35,7 @@
         name: "module1",
         data() {
             return {
+                error: false,
                 loading: false,
                 input: '',
                 answer: null,
@@ -68,6 +69,7 @@
             },
 
             async getAnswer() {
+                this.error = false;
                 this.loading = true;
                 let input = this.input;
 
@@ -108,6 +110,7 @@
                     // eslint-disable-next-line no-console
                     console.log(e);
                     this.answer = "Ошибка ввода!";
+                    this.error = true;
                 } finally {
                     this.loading = false;
                 }

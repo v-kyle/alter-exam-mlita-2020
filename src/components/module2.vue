@@ -48,7 +48,7 @@
         <v-alert color="success" dense class="white--text">
             Результат: <br/> <b>{{ answer }}</b>
         </v-alert>
-        <v-data-table :headers="headers" :items="items"/>
+        <v-data-table :headers="headers" :items="items" v-if="!error"/>
     </div>
 </template>
 
@@ -57,6 +57,7 @@
         name: "module2",
         data() {
             return {
+                error: false,
                 loading: false,
                 valid: false,
                 inputs: [''],
@@ -125,6 +126,7 @@
                 this.$forceUpdate();
             },
             async getAnswer() {
+                this.error = false;
                 this.loading = true;
                 this.inputs = this.inputs.map(this.convertSymbols);
                 this.formula = this.convertSymbols(this.formula);
@@ -166,8 +168,10 @@
                         });
                     } else {
                         this.answer = "Ошибка ввода!";
+                        this.error = true;
                     }
                 } catch (e) {
+                    this.error = true;
                     // eslint-disable-next-line no-console
                     console.log(e);
                     this.answer = "Ошибка ввода!";
