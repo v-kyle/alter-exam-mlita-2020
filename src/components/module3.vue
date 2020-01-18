@@ -102,8 +102,17 @@
 
             addInput() {
                 this.inputs.push('');
+
                 this.inputs = this.inputs.map(this.convertSymbols);
                 this.formula = this.convertSymbols(this.formula);
+
+                this.lastUsedForm = this.$refs.forms[this.$refs.forms.length - 1];
+                this.lastUsedInputIndex = this.inputs.length - 1;
+
+                setTimeout(()=>{
+                    this.$refs.forms[this.$refs.forms.length - 1].focus();
+                },100);
+
             },
             removeLastInput() {
                 this.inputs.pop();
@@ -114,6 +123,10 @@
 
                 this.lastUsedForm = this.$refs.forms[this.$refs.forms.length - 1];
                 this.lastUsedInputIndex = this.inputs.length - 1;
+
+                setTimeout(()=>{
+                    this.$refs.forms[this.$refs.forms.length - 1].focus();
+                },100);
             },
             changeActiveForm(index) {
                 if (index !== -123) {
@@ -127,7 +140,6 @@
             insertSpecialSymbol(signIndex) {
                 if (this.lastUsedInputIndex !== null) {
                     this.inputs[this.lastUsedInputIndex] += this.operations[signIndex].sign;
-                    this.lastUsedForm.focus();
                 } else {
                     this.formula += this.operations[signIndex].sign;
                     this.lastUsedForm.focus();

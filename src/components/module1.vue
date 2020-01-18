@@ -83,7 +83,7 @@
                             body: JSON.stringify({data: input})
                         });
                     let json = await responce.json();
-                    if (!json.error) {
+                    if (json.status === 'ok') {
                         this.answer = (json.result)? 'Противоречива' : 'Не противоречива';
 
                         this.headers = Object.keys(json.description).map(el => {
@@ -105,6 +105,9 @@
                                 return {[headers[index].text]: el};
                             }));
                         });
+                    } else {
+                        this.answer = "Ошибка ввода!";
+                        this.error = true;
                     }
                 } catch (e) {
                     // eslint-disable-next-line no-console
