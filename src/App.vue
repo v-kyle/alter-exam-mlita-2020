@@ -20,14 +20,13 @@
                     </v-card-title>
 
                     <v-card-text>
-                        Данный сайт - альтернативный экзамен по предмету МЛиТА студентов группы 8307 - Никулина Леонида и Зуба Виталия.
+                        Данный сайт - альтернативный экзамен по предмету МЛиТА студентов группы 8307 - Никулина Л. и Зуба В.
                         <br/>
                         На сайте представлены модули для ознакомления и изучения темы "Автоматизацией доказательств в исчислении высказываний".
                         <br/>
-                        Перед началом работы, настоятельно рекомендуется ознакомиться с <a target="_blank" href="https://docs.google.com/presentation/d/1QWKZYDRfYKyDRM2LjOALzYinpYVWN9bKQeTi9DNP7Oc/edit?usp=sharing"> презентацией данного веб-приложения </a>.
+                        Перед началом работы, настоятельно рекомендуется ознакомиться с <a target="_blank" href="https://docs.google.com/presentation/d/1QWKZYDRfYKyDRM2LjOALzYinpYVWN9bKQeTi9DNP7Oc/edit?usp=sharing"> презентацией данного веб-приложения.</a>
                         <br/>
                         Удачи в изучении математики!
-
                     </v-card-text>
 
                     <v-divider/>
@@ -57,7 +56,7 @@
                                         v-for="(module, index) in modules"
                                         :key="index"
                                 >
-                                    {{ module.title }}
+                                    <h4>{{ module.title }}</h4>
                                 </v-tab>
                             </v-tabs>
 
@@ -79,6 +78,8 @@
                                         <module1 v-if="index===1"/>
                                         <module2 v-if="index===2"/>
                                         <module3 v-if="index===3"/>
+                                        <module3up v-if="index===4"/>
+                                        <sentences v-if="index===5"/>
                                     </v-tab-item>
                                 </v-tabs-items>
                             </v-card-text>
@@ -105,6 +106,8 @@
     import module1 from "./components/module1";
     import module2 from "./components/module2";
     import module3 from "./components/module3";
+    import module3up from "./components/module3up";
+    import sentences from "./components/sentences";
 
     export default {
         name: 'App',
@@ -114,6 +117,8 @@
             module1,
             module2,
             module3,
+            module3up,
+            sentences
         },
 
         data: () => ({
@@ -134,6 +139,14 @@
                     title: 'Метод резолюций',
                     description: 'Использование метода резолюции для проверки истинности высказывания'
                 },
+                {
+                    title: 'Метод резолюций: "вычеркивание"',
+                    description: 'Использование метода резолюции с использованием метода вычеркивания для более оптимальных вычислений'
+                },
+                // {
+                //     title: 'Метод резолюций: "человеческий вид"',
+                //     description: 'Посылки вводятся в виде предложений на русском языке, все посылки должны соответствовать строгим критерии'
+                // }
 
             ],
             operations: [
